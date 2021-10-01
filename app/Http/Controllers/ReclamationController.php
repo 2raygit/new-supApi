@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reclamation;
+use Exception;
 use Illuminate\Http\Request;
+use PDOException;
 
 class ReclamationController extends Controller
 {// https://carbon.now.sh/
@@ -11,12 +13,32 @@ class ReclamationController extends Controller
         $data = Reclamation::get();
         return response()->json($data, 200);
       }
-
+    
       public function create(Request $request){
+        //return ['test' => 'ok'];
         $data['user_id'] = $request['user_id'];
         $data['evaluation_id'] = $request['evaluation_id'];
         $data['motif'] = $request['motif'];
-        Reclamation::create($data);
+        $reclamation = new Reclamation($request->reclamation);
+        try {
+          $reclamation->save();
+          return [
+            'message' => "Réclamation enregistré!",
+            'success' => true
+          ];
+        } catch (Exception $e) {
+          if ($e instanceof PDOException) {
+            return [
+              'message' => "Réclamation déja en cours de traitement!",
+              'success' => false
+            ];
+          }
+          return [
+            'message' => "Erreur interne",
+            'success' => false
+          ];
+        }
+        
         return response()->json([
             'message' => "Successfully created",
             'success' => true

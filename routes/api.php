@@ -10,9 +10,7 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\ReclamationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\AuthController;
-
-
-
+use App\Models\Reclamation;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,13 +54,14 @@ Route::group([
         Route::get('/logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout']);
         Route::get('/user', [App\Http\Controllers\Auth\AuthController::class, 'user']);
         Route::get('/notes',[NoteController::class,'index']);
-        Route::prefix('reclamation')->group(function () {
+        Route::post('/reclamations',[ReclamationController::class,'create']);
+        /* Route::prefix('reclamation')->group(function () {
             Route::get('/',[ PersonController::class, 'getAll']);
             Route::post('/',[ PersonController::class, 'create']);
             Route::delete('/{id}',[ PersonController::class, 'delete']);
             Route::get('/{id}',[ PersonController::class, 'get']);
             Route::put('/{id}',[ PersonController::class, 'update']);
-        });
+        }); */
 
     });
 
